@@ -1,7 +1,7 @@
 import { Box, Typography, Button, Grid, Skeleton } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import WeatherIcon from "./WeatherIcon";
-import WeatherInfoDisplay from "./WeatherInfoDisplay";
+import WeatherIcon from "./components/WeatherIcon";
+import WeatherInfoDisplay from "./components/WeatherInfoDisplay";
 
 export default function CurrentWeather() {
   const [tempDefault, setTempDefault] = useState(null);

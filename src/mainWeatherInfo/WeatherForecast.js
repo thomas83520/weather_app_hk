@@ -1,7 +1,7 @@
 import { Skeleton, Box, Typography, Grid, Divider } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
-import WeatherIcon from "./WeatherIcon";
+import WeatherIcon from "./components/WeatherIcon";
 import ThermostatIcon from "@mui/icons-material/Thermostat";
 import OpacityIcon from '@mui/icons-material/Opacity';
 
