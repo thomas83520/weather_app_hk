@@ -13,7 +13,7 @@ export default function Header() {
         src="/assets/flag-HK.png"
         pr={2}
       />
-      <Typography>Hong Kong Weather</Typography>
+      <Typography component="h1">Hong Kong Weather</Typography>
     </Box>
   );
 }

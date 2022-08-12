@@ -7,7 +7,7 @@ export default function CurrentWeather() {
   const [tempDefault, setTempDefault] = useState(null);
   const [humidityDefault, setHumidityDefault] = useState(null);
   const [tempMore, setTempMore] = useState(null);
-  const [humidityMore, setHumidityMore] = useState(null);
+  //const [humidityMore, setHumidityMore] = useState(null);
   const [showMore, setShowMore] = useState(false);
   const [icons, setIcons] = useState(null);
 
@@ -27,12 +27,16 @@ export default function CurrentWeather() {
         if (temperature.place === "Hong Kong Observatory")
           setTempDefault(temperature);
         else tempMoreArray.push(temperature);
+
+        return null;
       });
 
       humidityData.data.map((humidity) => {
         if (humidity.place === "Hong Kong Observatory")
           setHumidityDefault(humidity);
         else humidityMoreArray.push(humidity);
+
+        return null;
       });
 
       setTempMore(tempMoreArray);
@@ -70,7 +74,7 @@ export default function CurrentWeather() {
       <Box display={showMore ? "block" : "none"}>
         {tempMore ? (
           tempMore.map((temp) => (
-            <Box m="auto" width={{xs:"60%",md:"30%"}} key={temp.place}>
+            <Box m="auto" width={{ xs: "60%", md: "30%" }} key={temp.place}>
               <Typography textAlign="start" variant="body2">
                 {temp.place}
               </Typography>
