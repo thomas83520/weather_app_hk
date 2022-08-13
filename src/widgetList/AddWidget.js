@@ -25,8 +25,7 @@ export default function AddWidget({
         </Typography>
         <Box id="modal-modal-description">
           <Grid container spacing={2}>
-            {widgetsAvailable.items.map((item, index) => {
-              //console.log(item);
+            {widgetsAvailable.map((item, index) => {
               return (
                 <Grid key={index} item xs={6}>
                   <Box

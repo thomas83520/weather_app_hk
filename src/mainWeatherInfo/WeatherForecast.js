@@ -18,7 +18,6 @@ export default function WeatherForecast() {
         const responseJson = await response.json();
 
         setWeatherForecast(responseJson.weatherForecast);
-        console.log(responseJson);
       } catch (e) {
         setFetchError(true);
       }

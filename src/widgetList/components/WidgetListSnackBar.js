@@ -13,7 +13,7 @@ export default function WidgetListSnackBar({
       open={open}
       onClose={handleClose}
       key="Snackbar"
-      autoHideDuration={1000}
+      autoHideDuration={2000}
     >
       {success ? (
         <Alert

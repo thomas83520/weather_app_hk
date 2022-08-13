@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Box, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import AddWidget from "./AddWidget";
@@ -19,68 +19,70 @@ const style = {
   p: 4,
 };
 
-const initialWidgetsAvailable = [
-  {
-    demoWidget: (
-      <DemoWidget demoImage="/assets/barChart.png" name="Temperature range" />
-    ),
-    added: false,
-    widget: <TempWidget key="tempGraph"/>,
-  },
-  {
-    demoWidget: (
-      <DemoWidget demoImage="/assets/pieGraph.png" name="Lighting count" />
-    ),
-    added: false,
-    widget: <Box key="lightningCount">f</Box>,
-  },
-  {
-    demoWidget: <DemoWidget demoImage="/assets/areaChart.png" name="Tidal" />,
-    added: false,
-    widget: <Box key="tidal">g</Box>,
-  },
-  {
-    demoWidget: (
-      <DemoWidget
-        demoImage="/assets/radarGraph.png"
-        name="Visibility last 10minutes"
-      />
-    ),
-    added: false,
-    widget: <Box key="visibility">h</Box>,
-  },
-];
 export default function WidgetsList() {
   const [openModal, setOpenModal] = useState(false);
-  const { widgets, dispatch } = useWidgetListContext();
-  const [widgetsAvailable, setWidgetsAvailable] = useState({
-    items: initialWidgetsAvailable,
-  });
+  const { widgets, widgetsAvailable, dispatch } = useWidgetListContext();
+  const widgetsListRef = useRef();
   const [openSnackBar, setOpenSnackBar] = useState(false);
   const [success, setSuccess] = useState(true);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [init, setInit] = useState(true);
+
   useEffect(() => {
     const getAttachWidget = async () => {
-      //TODO : get attach widget
+      const attachedWidgets = JSON.parse(localStorage.getItem("attachWidgets"))
+        ? JSON.parse(localStorage.getItem("attachWidgets"))
+        : [];
+
+      attachedWidgets.forEach((item, index) => {
+        widgetsAvailable.forEach((availableItem, index) =>
+          availableItem.id === item.id ? addWidget(index) : null
+        );
+      });
     };
+    getAttachWidget();
+    setInit(false);
   }, []);
 
+  useEffect(() => {
+    if (init) {
+      widgetsListRef.current = widgets;
+      return;
+    }
+    if (widgetsListRef.current) {
+      if (widgetsListRef.current.length < widgets.length) {
+        setSnackbarMessage("Widget added to your dashboard");
+        setSuccess(true);
+        setOpenSnackBar(true);
+      }
+      if (widgetsListRef.current.length > widgets.length) {
+        setSnackbarMessage("Widget remove from your dashboard");
+        setSuccess(true);
+        setOpenSnackBar(true);
+      }
+    }
+    widgetsListRef.current = widgets;
+  }, [widgets]);
+
   const addWidget = (id) => {
-    let newAvailableWidgetList = [...widgetsAvailable.items];
+    let newAvailableWidgetList = [...widgetsAvailable];
     newAvailableWidgetList.splice(id, 1, {
-      ...widgetsAvailable.items[id],
+      ...widgetsAvailable[id],
       added: true,
     });
     dispatch({
       type: "ADD_WIDGET",
-      payload: [...widgets, widgetsAvailable.items[id].widget],
+      payload: {
+        widgets: [
+          ...widgets,
+          {
+            widget: widgetsAvailable[id].widget,
+            id: widgetsAvailable[id].id,
+          },
+        ],
+        widgetsAvailable: newAvailableWidgetList,
+      },
     });
-    setWidgetsAvailable((prevState) => {
-      return { ...prevState, items: newAvailableWidgetList };
-    });
-    setSnackbarMessage("Widget added to your dashboard");
-    setSuccess(true);
-    setOpenSnackBar(true);
   };
 
   const handleOpenModal = () => setOpenModal(true);
@@ -89,9 +91,8 @@ export default function WidgetsList() {
 
   return (
     <>
-      <TempWidget />
       {widgets.map((item) => {
-        return item;
+        return item.widget;
       })}
       <Box my={2}>
         <Button
