@@ -1,4 +1,4 @@
-import { Container, Grid } from "@mui/material";
+import { Container, Grid, Box, Divider } from "@mui/material";
 import CurrentWeather from "./mainWeatherInfo/CurrentWeather";
 import Header from "./components/Header";
 import WeatherForecast from "./mainWeatherInfo/WeatherForecast";
@@ -12,22 +12,24 @@ function App() {
   return (
     <Container>
       <Header />
-      <Grid container>
-        <Grid item xs={12}>
-          <CurrentWeather />
-          <WidgetWindow
-            icon={<CalendarMonthIcon fontSize="small" />}
-            title="9-day weather forecast"
-          >
-            <WeatherForecast />
-          </WidgetWindow>
+      <WidgetListContextProvider>
+        <Grid container>
+          <Grid item xs={12} md={6}>
+            <CurrentWeather />
+            <WidgetWindow
+              icon={<CalendarMonthIcon fontSize="small" />}
+              title="9-day weather forecast"
+            >
+              <WeatherForecast />
+            </WidgetWindow>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Box maxHeight="100vh" overflow={{ md: "scroll" }}>
+              <WidgetsList />
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <WidgetListContextProvider>
-            <WidgetsList />
-          </WidgetListContextProvider>
-        </Grid>
-      </Grid>
+      </WidgetListContextProvider>
     </Container>
   );
 }

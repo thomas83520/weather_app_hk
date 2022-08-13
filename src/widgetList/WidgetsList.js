@@ -7,6 +7,9 @@ import DemoWidget from "./components/DemoWidget";
 import WidgetListSnackBar from "./components/WidgetListSnackBar";
 import { useWidgetListContext } from "../hooks/useWidgetListContext";
 import TempWidget from "./components/TempWidget";
+import LigthningCountWidget from "./components/LigthningCountWidget";
+import TidalChartWidget from "./components/TidalChartWidget";
+import MeanVisibilityWidget from "./components/MeanVisibilityWidget";
 
 const style = {
   position: "absolute",
@@ -34,6 +37,7 @@ export default function WidgetsList() {
         ? JSON.parse(localStorage.getItem("attachWidgets"))
         : [];
 
+         console.log(attachedWidgets);
       attachedWidgets.forEach((item, index) => {
         widgetsAvailable.forEach((availableItem, index) =>
           availableItem.id === item.id ? addWidget(index) : null
@@ -90,7 +94,7 @@ export default function WidgetsList() {
   const handleCloseSnackBar = () => setOpenSnackBar(false);
 
   return (
-    <>
+    <Box mx={{md:1}}>
       {widgets.map((item) => {
         return item.widget;
       })}
@@ -118,6 +122,6 @@ export default function WidgetsList() {
         snackbarMessage={snackbarMessage}
         handleClose={handleCloseSnackBar}
       />
-    </>
+    </Box>
   );
 }

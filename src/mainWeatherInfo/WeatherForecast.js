@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 import WeatherIcon from "./components/WeatherIcon";
 import ThermostatIcon from "@mui/icons-material/Thermostat";
-import OpacityIcon from '@mui/icons-material/Opacity';
+import OpacityIcon from "@mui/icons-material/Opacity";
 
 export default function WeatherForecast() {
   const [weatherForecast, setWeatherForecast] = useState(null);
@@ -40,7 +40,8 @@ export default function WeatherForecast() {
               <Grid container py="3px" px={1}>
                 <Grid
                   item
-                  xs={3}
+                  xs={4}
+                  sm={3}
                   textAlign="start"
                   display="flex"
                   alignItems="center"
@@ -52,7 +53,8 @@ export default function WeatherForecast() {
                 </Grid>
                 <Grid
                   item
-                  xs={3}
+                  xs={4}
+                  sm={3}
                   display="flex"
                   alignItems="center"
                   justifyContent={{ xs: "center", md: "start" }}
@@ -66,8 +68,8 @@ export default function WeatherForecast() {
                 </Grid>
                 <Grid
                   item
-                  xs={6}
-                  md={3}
+                  xs={4}
+                  sm={3}
                   display="flex"
                   alignItems="center"
                   justifyContent={{ xs: "center", md: "start" }}
@@ -79,11 +81,11 @@ export default function WeatherForecast() {
                 <Grid
                   item
                   xs={3}
-                  display={{ xs: "none", md: "flex" }}
+                  display={{ xs: "none", sm: "flex" }}
                   justifyContent="center"
                   alignItems="center"
                 >
-                    <OpacityIcon fontSize="small"/>
+                  <OpacityIcon fontSize="small" />
                   <Typography>{`${forecast.forecastMinrh.value} - ${forecast.forecastMaxrh.value}%`}</Typography>
                 </Grid>
               </Grid>

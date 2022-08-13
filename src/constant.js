@@ -1,6 +1,9 @@
 import DemoWidget from "./widgetList/components/DemoWidget";
 import TempWidget from "./widgetList/components/TempWidget";
 import { Box } from "@mui/material";
+import LigthningCountWidget from "./widgetList/components/LigthningCountWidget";
+import TidalChartWidget from "./widgetList/components/TidalChartWidget";
+import MeanVisibilityWidget from "./widgetList/components/MeanVisibilityWidget";
 
 export const tempStation = [
   {
@@ -26,6 +29,25 @@ export const tempStation = [
   ,
 ];
 
+export const tidalStation = [
+  {
+    name: "Cheung Chau",
+    code: "CCH",
+  },
+  {
+    name: "Quarry Bay",
+    code: "QUB",
+  },
+  {
+    name: "Waglan Island",
+    code: "WAG",
+  },
+  {
+    name: "Chek Lap Kok",
+    code: "CLK",
+  },
+];
+
 export const initialWidgetsAvailable = [
   {
     demoWidget: (
@@ -41,13 +63,13 @@ export const initialWidgetsAvailable = [
     ),
     added: false,
     id: "lightningCountGraph",
-    widget: <Box key="lightningCountGraph">f</Box>,
+    widget: <LigthningCountWidget key="lightningCountGraph" />,
   },
   {
     demoWidget: <DemoWidget demoImage="/assets/areaChart.png" name="Tidal" />,
     added: false,
     id: "tidalChart",
-    widget: <Box key="tidalChart">g</Box>,
+    widget: <TidalChartWidget key="tidalChart" />,
   },
   {
     demoWidget: (
@@ -57,7 +79,7 @@ export const initialWidgetsAvailable = [
       />
     ),
     added: false,
-    id: "visibilityGraph",
-    widget: <Box key="visibility">h</Box>,
+    id: "meanVisibilityGraph",
+    widget: <MeanVisibilityWidget key="meanVisibilityGraph" />,
   },
 ];

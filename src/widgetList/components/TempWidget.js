@@ -10,6 +10,7 @@ import {
   InputLabel,
   Tooltip,
   CircularProgress,
+  FormControl,
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -36,24 +37,7 @@ const rangefromScreenSize = () => {
   if (window.innerWidth < 460) return 5;
   else return 5;
 };
-const data = [
-  { name: "Page A", uv: [300, 450] },
-  { name: "Page B", uv: 400 },
-  { name: "Page C", uv: 400, pv: 2400, amt: 2400 },
-  { name: "Page D", uv: 400, pv: 2400, amt: 2400 },
-  { name: "Page D", uv: 400, pv: 2400, amt: 2400 },
-  { name: "Page D", uv: 400, pv: 2400, amt: 2400 },
-  { name: "Page D", uv: 400, pv: 2400, amt: 2400 },
-  { name: "Page D", uv: 400, pv: 2400, amt: 2400 },
-  { name: "Page D", uv: 400, pv: 2400, amt: 2400 },
-  { name: "Page D", uv: 400, pv: 2400, amt: 2400 },
-  { name: "Page D", uv: 400, pv: 2400, amt: 2400 },
-  { name: "Page D", uv: 400, pv: 2400, amt: 2400 },
-  { name: "Page D", uv: 400, pv: 2400, amt: 2400 },
-  { name: "Page D", uv: 400, pv: 2400, amt: 2400 },
-];
 export default function TempWidget({ id = "tempChart" }) {
-  const { widgets, widgetsAvailable, dispatch } = useWidgetListContext();
   const maxDate = moment()
     .startOf("month")
     .subtract(1, "days")
@@ -68,7 +52,6 @@ export default function TempWidget({ id = "tempChart" }) {
     .subtract(rangefromScreenSize(), "days");
 
   const [maxRange, setMaxRange] = useState(rangefromScreenSize());
-  const [isAttach, setIsAttach] = useState(false);
   const [station, setStation] = useState("HKO");
   const [startingDate, setStartingDate] = useState(startDate);
   const [endDate, setEndDate] = useState(maxDate);
@@ -78,14 +61,10 @@ export default function TempWidget({ id = "tempChart" }) {
   const handleResize = () => {
     setMaxRange(rangefromScreenSize());
   };
+
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
-
-    const attachedWidget = getAttachWidgetFromStorage();
-    attachedWidget.forEach((item) =>
-      item.id === id ? setIsAttach(true) : null
-    );
-  }, []);
+  });
 
   useEffect(() => {
     const getTempHistory = async () => {
@@ -108,7 +87,7 @@ export default function TempWidget({ id = "tempChart" }) {
         if (jsonMaxTemp.data[startingDate.get("date") - 1 + i])
           newData.push({
             name: jsonMaxTemp.data[startingDate.get("date") - 1 + i][2],
-            uv: [
+            temp: [
               jsonMaxTemp.data[startingDate.get("date") - 1 + i][3],
               jsonMinTemp.data[startingDate.get("date") - 1 + i][3],
             ],
@@ -157,56 +136,12 @@ export default function TempWidget({ id = "tempChart" }) {
     setStation(event.target.value);
   };
 
-  const getAttachWidgetFromStorage = () => {
-    return JSON.parse(localStorage.getItem("attachWidgets"))
-      ? JSON.parse(localStorage.getItem("attachWidgets"))
-      : [];
-  };
-
-  const handleAttachment = () => {
-    if (!isAttach) {
-      let newAttach = getAttachWidgetFromStorage();
-      console.log(newAttach);
-      newAttach.push({ id: id });
-      window.localStorage.setItem("attachWidgets", JSON.stringify(newAttach));
-    } else {
-      window.localStorage.setItem(
-        "attachWidgets",
-        JSON.stringify(
-          JSON.parse(localStorage.getItem("attachWidgets")).filter(
-            (item) => item.id !== id
-          )
-        )
-      );
-    }
-
-    console.log(JSON.parse(localStorage.getItem("attachWidgets")));
-    setIsAttach(!isAttach);
-  };
-  const handleRemove = () => {
-    handleAttachment();
-    const newAvailableWidget = [];
-    widgetsAvailable.forEach((item) => {
-      if (item.id === id) newAvailableWidget.push({ ...item, added: false });
-      else newAvailableWidget.push({ ...item });
-    });
-    dispatch({
-      type: "DELETE_WIDGET",
-      payload: {
-        widgets: widgets.filter((widget) => widget.id !== id),
-        widgetsAvailable: newAvailableWidget,
-      },
-    });
-  };
-
   return (
     <WidgetWindow
       icon={<Thermostat fontSize="small" />}
       title="Temperature range"
-      isAttach={isAttach}
       isAttachable="true"
-      attach={handleAttachment}
-      remove={handleRemove}
+      id={id}
     >
       <Box
         position="relative"
@@ -218,11 +153,33 @@ export default function TempWidget({ id = "tempChart" }) {
       >
         {loading && (
           <Box position="absolute" top="5px" right="10px">
-            <CircularProgress />
+            <CircularProgress size="1rem" />
           </Box>
         )}
-        <Box mx={1} textAlign="center">
-          <Typography mx={2}>Station :</Typography>
+        <Box textAlign="center">
+          <Typography display={{ xs: "none", sm: "" }} mx={2}>
+            Station :
+          </Typography>
+        </Box>
+        <Box width="100%" maxWidth={350} px={1}>
+          <FormControl fullWidth>
+            <Select autoWidth value={station} onChange={handleChangeStation}>
+              {tempStation.map((station) => (
+                <MenuItem key={station.code} value={station.code}>
+                  {station.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl></Box>
+      </Box>
+      <Box
+        m={1}
+        display="flex"
+        justifyContent="space-evenly"
+        alignItems="center"
+      >
+        <Box textAlign="center">
+          <Typography>Dates :</Typography>
           <Box display="flex" alignItems="center">
             <Typography variant="caption" alignContent="center" mr="2px">
               Max. {maxRange} days range
@@ -232,21 +189,6 @@ export default function TempWidget({ id = "tempChart" }) {
             </Tooltip>
           </Box>
         </Box>
-        <Select value={station} onChange={handleChangeStation}>
-          {tempStation.map((station) => (
-            <MenuItem key={station.code} value={station.code}>
-              {station.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </Box>
-      <Box
-        m={1}
-        display="flex"
-        justifyContent="space-evenly"
-        alignItems="center"
-      >
-        <Typography>Dates :</Typography>
         <DatePicker
           label="Starting date"
           minDate={minDate}
@@ -280,11 +222,11 @@ export default function TempWidget({ id = "tempChart" }) {
               <XAxis dataKey="name" />
               <YAxis />
               <RechartsTooltip />
-              <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="colorTemp" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
                 <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
               </linearGradient>
-              <Bar dataKey="uv" fill="#8884d8"></Bar>
+              <Bar dataKey="temp" fill="#8884d8"></Bar>
             </BarChart>
           </ResponsiveContainer>
         ) : (

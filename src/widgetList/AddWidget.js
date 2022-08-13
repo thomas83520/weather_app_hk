@@ -14,7 +14,7 @@ export default function AddWidget({
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
     >
-      <Box sx={style}>
+      <Box sx={style} maxHeight="70%" overflow="scroll">
         <Typography
           id="modal-modal-title"
           variant="subtitle1"
@@ -27,14 +27,12 @@ export default function AddWidget({
           <Grid container spacing={2}>
             {widgetsAvailable.map((item, index) => {
               return (
-                <Grid key={index} item xs={6}>
+                <Grid key={index} item xs={12}>
                   <Box
                     sx={{
-                      filter: item.added
-                        ? "grayscale(100%)"
-                        : "grayscale(0%)",
+                      filter: item.added ? "grayscale(100%)" : "grayscale(0%)",
                     }}
-                    onClick={item.added ? null :() => addWidget(index)}
+                    onClick={item.added ? null : () => addWidget(index)}
                   >
                     {item.demoWidget}
                   </Box>

@@ -73,14 +73,30 @@ export default function CurrentWeather() {
       </Button>
       <Box display={showMore ? "block" : "none"}>
         {tempMore ? (
-          tempMore.map((temp) => (
-            <Box m="auto" width={{ xs: "60%", md: "30%" }} key={temp.place}>
-              <Typography textAlign="start" variant="body2">
-                {temp.place}
-              </Typography>
-              <Typography variant="h5"> {temp.value}°C</Typography>
-            </Box>
-          ))
+          <Grid
+            container
+          >
+            {tempMore.map((temp) => (
+              <Grid item xs={12} sm={6} lg={4}>
+                <Box
+                  mx="auto"
+                  my={2}
+                  width={{ xs: "60%", md: "30%" }}
+                  key={temp.place}
+                  sx={{
+                    borderRadius: "5px",
+                    boxShadow: "0px 0px 5px 4px rgba(236, 236, 236, 1)",
+                  }}
+                  p={1}
+                >
+                  <Typography textAlign="start" variant="body2">
+                    {temp.place}
+                  </Typography>
+                  <Typography variant="h5"> {temp.value}°C</Typography>
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
         ) : (
           <Box width="100%">
             <Skeleton variant="text" />
