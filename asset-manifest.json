@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.js": "/wheather_app_hk/static/js/main.f83838ad.js",
-    "index.html": "/wheather_app_hk/index.html",
-    "main.f83838ad.js.map": "/wheather_app_hk/static/js/main.f83838ad.js.map"
+    "main.js": "/weather_app_hk/static/js/main.f83838ad.js",
+    "index.html": "/weather_app_hk/index.html",
+    "main.f83838ad.js.map": "/weather_app_hk/static/js/main.f83838ad.js.map"
   },
   "entrypoints": [
     "static/js/main.f83838ad.js"
