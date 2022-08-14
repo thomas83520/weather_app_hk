@@ -1,7 +1,6 @@
 {
   "name": "weather_app_hk",
   "version": "0.1.0",
-  "homepage": "https://thomas83520.github.io/wheather_in_hk",
   "private": true,
   "dependencies": {
     "@date-io/date-fns": "^2.15.0",
@@ -21,8 +20,6 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "predeploy":"npm run build",
-    "deploy" : "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
