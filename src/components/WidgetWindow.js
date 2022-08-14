@@ -19,11 +19,15 @@ export default function WidgetWindow({
 }) {
   const theme = useTheme();
   const { widgets, widgetsAvailable, dispatch } = useWidgetListContext();
+
   const [openSnackBar, setOpenSnackBar] = useState(false);
   const [success, setSuccess] = useState(true);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [isAttach, setIsAttach] = useState(false);
+  
+  const handleCloseSnackBar = () => setOpenSnackBar(false);
 
+  //Set isAttach to true if widget comes from local storage
   useEffect(() => {
     const attachedWidget = getAttachWidgetFromStorage();
     attachedWidget.forEach((item) =>
@@ -31,14 +35,14 @@ export default function WidgetWindow({
     );
   }, []);
 
-  const handleCloseSnackBar = () => setOpenSnackBar(false);
-
+  //Get widget attach to dashboard from local storage
   const getAttachWidgetFromStorage = () => {
     return JSON.parse(localStorage.getItem("attachWidgets"))
       ? JSON.parse(localStorage.getItem("attachWidgets"))
       : [];
   };
 
+  //Attach widget to dashboard
   const handleAttachment = () => {
     if (!isAttach) {
       let newAttach = getAttachWidgetFromStorage();
@@ -63,6 +67,8 @@ export default function WidgetWindow({
     setOpenSnackBar(true);
     setIsAttach(!isAttach);
   };
+
+  //Remove widget from dashboard and remove attachment if widget is attached
   const handleRemove = () => {
     if (isAttach) handleAttachment();
     const newAvailableWidget = [];
@@ -78,6 +84,7 @@ export default function WidgetWindow({
       },
     });
   };
+
   return (
     <Box
       my={1}

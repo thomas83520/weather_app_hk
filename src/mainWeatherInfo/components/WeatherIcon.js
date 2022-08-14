@@ -1,4 +1,5 @@
 import React from "react";
+
 import { Box } from "@mui/material";
 
 export default function WeatherIcon({ icon, height = 70, width = 70, my = 1 }) {

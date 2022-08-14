@@ -1,12 +1,8 @@
-import { Box, Typography } from "@mui/material";
 import React from "react";
 
-export default function DemoWidget({
-  name,
-  isAdded,
-  demoImage,
-  id,
-}) {
+import { Box, Typography } from "@mui/material";
+
+export default function DemoWidget({ name, demoImage }) {
   return (
     <Box
       width="100%"
@@ -41,11 +37,3 @@ export default function DemoWidget({
     </Box>
   );
 }
-
-/*<Box
-component="img"
-maxHeight="70%"
-maxWidth="90%"
-src={demoImage}
-alt="Graph/Charts demo image"
-/>*/

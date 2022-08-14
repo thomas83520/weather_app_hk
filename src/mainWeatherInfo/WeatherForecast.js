@@ -1,13 +1,17 @@
-import { Skeleton, Box, Typography, Grid, Divider } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
-import WeatherIcon from "./components/WeatherIcon";
+import { Skeleton, Box, Typography, Grid, Divider } from "@mui/material";
 import ThermostatIcon from "@mui/icons-material/Thermostat";
 import OpacityIcon from "@mui/icons-material/Opacity";
 
+import WeatherIcon from "./components/WeatherIcon";
+
 export default function WeatherForecast() {
+
   const [weatherForecast, setWeatherForecast] = useState(null);
   const [fetchError, setFetchError] = useState(false);
+
+  //Get weather forecast
   useEffect(() => {
     const getWeatherForecast = async () => {
       try {

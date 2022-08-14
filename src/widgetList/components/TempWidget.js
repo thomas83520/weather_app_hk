@@ -1,44 +1,43 @@
-import { Thermostat } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
-import WidgetWindow from "../../components/WidgetWindow";
+import { useTheme } from "@emotion/react";
+
 import {
   Box,
   TextField,
   Typography,
   Select,
   MenuItem,
-  InputLabel,
   Tooltip,
   CircularProgress,
   FormControl,
 } from "@mui/material";
+import { Thermostat } from "@mui/icons-material";
 import InfoIcon from "@mui/icons-material/Info";
 import { DatePicker } from "@mui/x-date-pickers";
 import moment from "moment";
 
-import { tempStation } from "../../constant";
 import {
   BarChart,
   CartesianGrid,
   XAxis,
   YAxis,
-  Legend,
   Bar,
-  LineChart,
   Tooltip as RechartsTooltip,
-  Line,
   ResponsiveContainer,
-  LabelList,
 } from "recharts";
-import { deepOrange } from "@mui/material/colors";
-import { useWidgetListContext } from "../../hooks/useWidgetListContext";
-import { useTheme } from "@emotion/react";
 
+import WidgetWindow from "../../components/WidgetWindow";
+import { tempStation } from "../../constant";
+
+// Set max date range from window width
 const rangefromScreenSize = () => {
-  if (window.innerWidth < 460) return 5;
-  else return 5;
+  if (window.innerWidth < 460) return 7;
+  if (window.innerWidth < 1200) return 14;
+  else return 21;
 };
 export default function TempWidget({ id = "tempChart" }) {
+  const theme = useTheme();
+
   const maxDate = moment()
     .startOf("month")
     .subtract(1, "days")
@@ -52,7 +51,6 @@ export default function TempWidget({ id = "tempChart" }) {
     .subtract(1, "days")
     .subtract(rangefromScreenSize(), "days");
 
-  const theme = useTheme();
   const [maxRange, setMaxRange] = useState(rangefromScreenSize());
   const [station, setStation] = useState("HKO");
   const [startingDate, setStartingDate] = useState(startDate);
@@ -61,14 +59,17 @@ export default function TempWidget({ id = "tempChart" }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  //Update max range from window width
   const handleResize = () => {
     setMaxRange(rangefromScreenSize());
   };
 
+  //Add listener for window resize
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
   });
 
+  //Get temperature history from dates and station
   useEffect(() => {
     const getTempHistory = async () => {
       setLoading(true);
@@ -109,6 +110,7 @@ export default function TempWidget({ id = "tempChart" }) {
     }
   }, [startingDate, endDate, station]);
 
+  //Change date start
   const handleNewStartDate = (newStartDate) => {
     if (moment.max(newStartDate, endDate) === newStartDate) {
       setEndDate(newStartDate);
@@ -124,6 +126,8 @@ export default function TempWidget({ id = "tempChart" }) {
     }
     setStartingDate(newStartDate);
   };
+
+  //Change date end
   const handleNewEndDate = (newEndDate) => {
     if (moment.max(newEndDate, startingDate) === startingDate) {
       setStartingDate(newEndDate);
@@ -140,6 +144,7 @@ export default function TempWidget({ id = "tempChart" }) {
     setEndDate(newEndDate);
   };
 
+  //Change station
   const handleChangeStation = (event) => {
     setStation(event.target.value);
   };

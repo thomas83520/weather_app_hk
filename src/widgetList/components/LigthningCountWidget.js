@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import WidgetWindow from "../../components/WidgetWindow";
+import { useTheme } from "@emotion/react";
+
 import { Thunderstorm } from "@mui/icons-material";
 import { Box, Typography, Button } from "@mui/material";
 
 import { Sector, ResponsiveContainer, PieChart, Pie } from "recharts";
-import { useTheme } from "@emotion/react";
 
+import WidgetWindow from "../../components/WidgetWindow";
+
+//Compenent fo active section in pie charts
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
   const {
@@ -107,6 +110,7 @@ const renderActiveShape = (props) => {
 
 export default function LigthningCountWidget({ id = "lightningCountGraph" }) {
   const theme = useTheme();
+
   const [errorMessage, setErrorMessage] = useState("");
   const [data, setData] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -115,6 +119,7 @@ export default function LigthningCountWidget({ id = "lightningCountGraph" }) {
   const [useRandomData, setUseRandomData] = useState(false);
   const [randomData, setRadomData] = useState([]);
 
+  //Get lightning count
   useEffect(() => {
     const getLightingCount = async () => {
       setErrorMessage("");
@@ -143,6 +148,7 @@ export default function LigthningCountWidget({ id = "lightningCountGraph" }) {
     getLightingCount();
   }, []);
 
+  //Set random data if no lightning recorded
   const handleRandomData = () => {
     setRadomData([
       {
@@ -164,6 +170,8 @@ export default function LigthningCountWidget({ id = "lightningCountGraph" }) {
     ]);
     setUseRandomData(true);
   };
+
+  
   return (
     <WidgetWindow
       icon={<Thunderstorm fontSize="small" />}

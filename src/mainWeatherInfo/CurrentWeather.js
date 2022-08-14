@@ -1,18 +1,17 @@
-import { useTheme } from "@emotion/react";
-import { Box, Typography, Button, Grid, Skeleton } from "@mui/material";
 import React, { useEffect, useState } from "react";
+
+import { Box, Typography, Button, Grid, Skeleton } from "@mui/material";
 import WeatherIcon from "./components/WeatherIcon";
 import WeatherInfoDisplay from "./components/WeatherInfoDisplay";
 
 export default function CurrentWeather() {
-  const theme = useTheme();
   const [tempDefault, setTempDefault] = useState(null);
   const [humidityDefault, setHumidityDefault] = useState(null);
   const [tempMore, setTempMore] = useState(null);
-  //const [humidityMore, setHumidityMore] = useState(null);
   const [showMore, setShowMore] = useState(false);
   const [icons, setIcons] = useState(null);
 
+  //Load current weather info
   useEffect(() => {
     const loadInfo = async () => {
       const response = await fetch(
@@ -46,6 +45,7 @@ export default function CurrentWeather() {
 
     loadInfo();
   }, []);
+
   return (
     <Box textAlign="center">
       <Box display="flex" justifyContent="space-around">
@@ -85,7 +85,8 @@ export default function CurrentWeather() {
                   key={temp.place}
                   sx={{
                     borderRadius: "5px",
-                    boxShadow: "3px 3px 3px rgba(0,0,0,0.2),-0px -0px 3px rgba(200,200,200,0.7)",
+                    boxShadow:
+                      "3px 3px 3px rgba(0,0,0,0.2),-0px -0px 3px rgba(200,200,200,0.7)",
                   }}
                   p={1}
                 >

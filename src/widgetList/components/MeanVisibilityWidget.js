@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useTheme } from "@emotion/react";
 
-import WidgetWindow from "../../components/WidgetWindow";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Box, Typography } from "@mui/material";
+
 import {
   ResponsiveContainer,
   RadarChart,
@@ -9,27 +11,29 @@ import {
   PolarGrid,
   PolarAngleAxis,
   PolarRadiusAxis,
-  Legend,
   Tooltip,
 } from "recharts";
-import { Box, Typography } from "@mui/material";
-import { getValue } from "@mui/system";
-import { useTheme } from "@emotion/react";
+
+import WidgetWindow from "../../components/WidgetWindow";
 
 export default function MeanVisibilityWidget({ id = "meanVisibilityGraph" }) {
   const theme = useTheme();
+
   const [errorMessage, setErrorMessage] = useState("");
   const [data, setData] = useState([]);
   const [windowWidth, setWindowWith] = useState(window.innerWidth);
 
+  //save window width on resize
   const handleResize = () => {
     setWindowWith(window.innerWidth);
   };
 
+  //add listener for window resize
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
   });
 
+  //Get mean visibility
   useEffect(() => {
     const getMeanVisibility = async () => {
       setErrorMessage("");

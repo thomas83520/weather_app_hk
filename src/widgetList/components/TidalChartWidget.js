@@ -1,6 +1,7 @@
-import { Waves } from "@mui/icons-material";
 import React, { useState, useEffect } from "react";
-import WidgetWindow from "../../components/WidgetWindow";
+import { useTheme } from "@emotion/react";
+import moment from "moment";
+
 import {
   Box,
   Select,
@@ -10,9 +11,9 @@ import {
   TextField,
   Grid,
 } from "@mui/material";
-import { tidalStation } from "../../constant";
-import moment from "moment";
+import { Waves } from "@mui/icons-material";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
+
 import {
   AreaChart,
   ResponsiveContainer,
@@ -22,10 +23,13 @@ import {
   Area,
   Tooltip,
 } from "recharts";
-import { useTheme } from "@emotion/react";
+
+import { tidalStation } from "../../constant";
+import WidgetWindow from "../../components/WidgetWindow";
 
 export default function TidalChartWidget({ id = "tidalChart" }) {
   const theme = useTheme();
+
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [station, setStation] = useState("CCH");
@@ -36,10 +40,7 @@ export default function TidalChartWidget({ id = "tidalChart" }) {
   const [endValue, setEndValue] = useState(moment().endOf("day"));
   const [data, setData] = useState([]);
 
-  const handleChangeStation = (event) => {
-    setStation(event.target.value);
-  };
-
+  //Get tides heights and times
   useEffect(() => {
     const getTides = async () => {
       setLoading(true);
@@ -69,6 +70,11 @@ export default function TidalChartWidget({ id = "tidalChart" }) {
 
     getTides();
   }, [station, date, startValue, endValue]);
+
+  //Change station
+  const handleChangeStation = (event) => {
+    setStation(event.target.value);
+  };
 
   return (
     <WidgetWindow

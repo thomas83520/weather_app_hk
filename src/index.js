@@ -1,8 +1,10 @@
+import React from "react";
+import ReactDOM from "react-dom/client";
+
 import { createTheme, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import React from "react";
-import ReactDOM from "react-dom/client";
+
 import App from "./App";
 
 const theme = createTheme({

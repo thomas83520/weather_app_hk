@@ -1,6 +1,5 @@
 import DemoWidget from "./widgetList/components/DemoWidget";
 import TempWidget from "./widgetList/components/TempWidget";
-import { Box } from "@mui/material";
 import LigthningCountWidget from "./widgetList/components/LigthningCountWidget";
 import TidalChartWidget from "./widgetList/components/TidalChartWidget";
 import MeanVisibilityWidget from "./widgetList/components/MeanVisibilityWidget";
@@ -26,7 +25,7 @@ export const tempStation = [
     name: "The Peak",
     code: "VP1",
   },
-  ,
+  
 ];
 
 export const tidalStation = [
@@ -66,7 +65,7 @@ export const initialWidgetsAvailable = [
     widget: <LigthningCountWidget key="lightningCountGraph" />,
   },
   {
-    demoWidget: <DemoWidget demoImage={require("./assets/areaChart.png")} name="Tidal" />,
+    demoWidget: <DemoWidget demoImage={require("./assets/areaChart.png")} name="Tides charts" />,
     added: false,
     id: "tidalChart",
     widget: <TidalChartWidget key="tidalChart" />,
