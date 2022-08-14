@@ -10,6 +10,7 @@ import TempWidget from "./components/TempWidget";
 import LigthningCountWidget from "./components/LigthningCountWidget";
 import TidalChartWidget from "./components/TidalChartWidget";
 import MeanVisibilityWidget from "./components/MeanVisibilityWidget";
+import { useTheme } from "@emotion/react";
 
 const style = {
   position: "absolute",
@@ -36,13 +37,13 @@ export default function WidgetsList() {
       const attachedWidgets = JSON.parse(localStorage.getItem("attachWidgets"))
         ? JSON.parse(localStorage.getItem("attachWidgets"))
         : [];
-
-         console.log(attachedWidgets);
+      let widgetToAdd = [];
       attachedWidgets.forEach((item, index) => {
         widgetsAvailable.forEach((availableItem, index) =>
-          availableItem.id === item.id ? addWidget(index) : null
+          availableItem.id === item.id ? widgetToAdd.push(index) : null
         );
       });
+      addWidget(widgetToAdd);
     };
     getAttachWidget();
     setInit(false);
@@ -68,22 +69,23 @@ export default function WidgetsList() {
     widgetsListRef.current = widgets;
   }, [widgets]);
 
-  const addWidget = (id) => {
+  const addWidget = (ids) => {
     let newAvailableWidgetList = [...widgetsAvailable];
-    newAvailableWidgetList.splice(id, 1, {
-      ...widgetsAvailable[id],
-      added: true,
+    let widgetToAdd = [];
+    ids.forEach((id) => {
+      newAvailableWidgetList.splice(id, 1, {
+        ...widgetsAvailable[id],
+        added: true,
+      });
+      widgetToAdd.push({
+        widget: widgetsAvailable[id].widget,
+        id: widgetsAvailable[id].id,
+      });
     });
     dispatch({
       type: "ADD_WIDGET",
       payload: {
-        widgets: [
-          ...widgets,
-          {
-            widget: widgetsAvailable[id].widget,
-            id: widgetsAvailable[id].id,
-          },
-        ],
+        widgets: [...widgets, ...widgetToAdd],
         widgetsAvailable: newAvailableWidgetList,
       },
     });
@@ -94,7 +96,7 @@ export default function WidgetsList() {
   const handleCloseSnackBar = () => setOpenSnackBar(false);
 
   return (
-    <Box mx={{md:1}}>
+    <Box mx={{ md: 1 }}>
       {widgets.map((item) => {
         return item.widget;
       })}

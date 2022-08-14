@@ -27,7 +27,7 @@ export default function WeatherForecast() {
   }, []);
 
   return (
-    <Box witdh="100%" m={1} textAlign="center">
+    <Box witdh="100%" m={1} p={1} textAlign="center">
       {fetchError && (
         <Typography color="error">
           An error as occur. Try to reload the page

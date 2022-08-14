@@ -4,6 +4,7 @@ import { Thunderstorm } from "@mui/icons-material";
 import { Box, Typography, Button } from "@mui/material";
 
 import { Sector, ResponsiveContainer, PieChart, Pie } from "recharts";
+import { useTheme } from "@emotion/react";
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
@@ -105,6 +106,8 @@ const renderActiveShape = (props) => {
 };
 
 export default function LigthningCountWidget({ id = "lightningCountGraph" }) {
+  const theme = useTheme();
+  const [errorMessage, setErrorMessage] = useState("");
   const [data, setData] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [totalGround, setTotalGround] = useState(0);
@@ -114,21 +117,26 @@ export default function LigthningCountWidget({ id = "lightningCountGraph" }) {
 
   useEffect(() => {
     const getLightingCount = async () => {
-      const response = await fetch(
-        "https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=LHL&lang=en&rformat=json"
-      );
-      const jsonResponse = await response.json();
-      if (jsonResponse.data && jsonResponse.data.length >= 2) {
-        setTotalCloud(jsonResponse.data[jsonResponse.data.length - 1][3]);
-        setTotalGround(jsonResponse.data[jsonResponse.data.length - 2][3]);
-        let lightingCount = [];
-        for (let i = 0; i < jsonResponse.data.length - 2; i++) {
-          lightingCount.push({
-            territory: jsonResponse.data[i][2],
-            value: jsonResponse.data[i][3],
-          });
+      setErrorMessage("");
+      try {
+        const response = await fetch(
+          "https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=LHL&lang=en&rformat=json"
+        );
+        const jsonResponse = await response.json();
+        if (jsonResponse.data && jsonResponse.data.length >= 2) {
+          setTotalCloud(jsonResponse.data[jsonResponse.data.length - 1][3]);
+          setTotalGround(jsonResponse.data[jsonResponse.data.length - 2][3]);
+          let lightingCount = [];
+          for (let i = 0; i < jsonResponse.data.length - 2; i++) {
+            lightingCount.push({
+              territory: jsonResponse.data[i][2],
+              value: jsonResponse.data[i][3],
+            });
+          }
+          setData(lightingCount);
         }
-        setData(lightingCount);
+      } catch (e) {
+        setErrorMessage("Failed to load data.");
       }
     };
 
@@ -179,6 +187,13 @@ export default function LigthningCountWidget({ id = "lightningCountGraph" }) {
             <Typography>{totalGround}</Typography>
           </Box>
         </Box>
+        {errorMessage.length > 0 && (
+          <Box>
+            <Typography color={theme.palette.error.main}>
+              {errorMessage}
+            </Typography>
+          </Box>
+        )}
         {useRandomData && (
           <Box sx={{ color: "warning.main" }}>
             <Typography textAlign="center">This is not real data</Typography>

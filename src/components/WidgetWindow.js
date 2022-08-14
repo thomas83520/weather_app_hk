@@ -8,6 +8,7 @@ import LinkOffIcon from "@mui/icons-material/LinkOff";
 import { Delete } from "@mui/icons-material";
 
 import { useWidgetListContext } from "../hooks/useWidgetListContext";
+import { useTheme } from "@emotion/react";
 
 export default function WidgetWindow({
   icon,
@@ -16,6 +17,7 @@ export default function WidgetWindow({
   isAttachable = false,
   id = null,
 }) {
+  const theme = useTheme();
   const { widgets, widgetsAvailable, dispatch } = useWidgetListContext();
   const [openSnackBar, setOpenSnackBar] = useState(false);
   const [success, setSuccess] = useState(true);
@@ -41,6 +43,7 @@ export default function WidgetWindow({
     if (!isAttach) {
       let newAttach = getAttachWidgetFromStorage();
       newAttach.push({ id: id });
+      console.log(newAttach);
       window.localStorage.setItem("attachWidgets", JSON.stringify(newAttach));
     } else {
       window.localStorage.setItem(
@@ -53,6 +56,11 @@ export default function WidgetWindow({
       );
     }
 
+    setSuccess(true);
+    setSnackbarMessage(
+      `Widget ${isAttach ? "detach from" : "attach to"} your dashboard`
+    );
+    setOpenSnackBar(true);
     setIsAttach(!isAttach);
   };
   const handleRemove = () => {
@@ -74,7 +82,12 @@ export default function WidgetWindow({
     <Box
       my={1}
       width="100%"
-      sx={{ border: "1px solid darkGrey", borderRadius: "5px" }}
+      sx={{
+        border: `1px solid ${theme.palette.primary.light}`,
+        borderRadius: "15px",
+        boxShadow:
+          "3px 3px 6px rgba(0,0,0,0.2),-2px -2px 4px rgba(255,255,255,0.3)",
+      }}
     >
       <Box
         display="flex"
@@ -95,7 +108,7 @@ export default function WidgetWindow({
               {isAttach ? (
                 <LinkOffIcon color="error" />
               ) : (
-                <LinkIcon color="primary" />
+                <LinkIcon color="info" />
               )}
             </IconButton>
             <IconButton aria-label="attach to dashboard" onClick={handleRemove}>

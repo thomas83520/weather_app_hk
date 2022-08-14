@@ -32,6 +32,7 @@ import {
 } from "recharts";
 import { deepOrange } from "@mui/material/colors";
 import { useWidgetListContext } from "../../hooks/useWidgetListContext";
+import { useTheme } from "@emotion/react";
 
 const rangefromScreenSize = () => {
   if (window.innerWidth < 460) return 5;
@@ -51,11 +52,13 @@ export default function TempWidget({ id = "tempChart" }) {
     .subtract(1, "days")
     .subtract(rangefromScreenSize(), "days");
 
+  const theme = useTheme();
   const [maxRange, setMaxRange] = useState(rangefromScreenSize());
   const [station, setStation] = useState("HKO");
   const [startingDate, setStartingDate] = useState(startDate);
   const [endDate, setEndDate] = useState(maxDate);
   const [data, setData] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleResize = () => {
@@ -69,31 +72,36 @@ export default function TempWidget({ id = "tempChart" }) {
   useEffect(() => {
     const getTempHistory = async () => {
       setLoading(true);
+      setErrorMessage("");
       const dayDiff = endDate.diff(startingDate, "days");
-      const responseMaxTemp = await fetch(
-        `https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=CLMMAXT&lang=en&rformat=json&station=${station}&year=${startingDate.get(
-          "year"
-        )}&month=${startingDate.get("month") + 1}`
-      );
-      const jsonMaxTemp = await responseMaxTemp.json();
-      const responseMinTemp = await fetch(
-        `https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=CLMMINT&lang=en&rformat=json&station=${station}&year=${startingDate.get(
-          "year"
-        )}&month=${startingDate.get("month") + 1}`
-      );
-      const jsonMinTemp = await responseMinTemp.json();
-      let newData = [];
-      for (let i = 0; i <= dayDiff; i++) {
-        if (jsonMaxTemp.data[startingDate.get("date") - 1 + i])
-          newData.push({
-            name: jsonMaxTemp.data[startingDate.get("date") - 1 + i][2],
-            temp: [
-              jsonMaxTemp.data[startingDate.get("date") - 1 + i][3],
-              jsonMinTemp.data[startingDate.get("date") - 1 + i][3],
-            ],
-          });
+      try {
+        const responseMaxTemp = await fetch(
+          `https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=CLMMAXT&lang=en&rformat=json&station=${station}&year=${startingDate.get(
+            "year"
+          )}&month=${startingDate.get("month") + 1}`
+        );
+        const jsonMaxTemp = await responseMaxTemp.json();
+        const responseMinTemp = await fetch(
+          `https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=CLMMINT&lang=en&rformat=json&station=${station}&year=${startingDate.get(
+            "year"
+          )}&month=${startingDate.get("month") + 1}`
+        );
+        const jsonMinTemp = await responseMinTemp.json();
+        let newData = [];
+        for (let i = 0; i <= dayDiff; i++) {
+          if (jsonMaxTemp.data[startingDate.get("date") - 1 + i])
+            newData.push({
+              name: jsonMaxTemp.data[startingDate.get("date") - 1 + i][2],
+              temp: [
+                jsonMaxTemp.data[startingDate.get("date") - 1 + i][3],
+                jsonMinTemp.data[startingDate.get("date") - 1 + i][3],
+              ],
+            });
+        }
+        setData(newData);
+      } catch (e) {
+        setErrorMessage("Failed to load data.");
       }
-      setData(newData);
       setLoading(false);
     };
     if (startingDate && endDate && station) {
@@ -170,7 +178,8 @@ export default function TempWidget({ id = "tempChart" }) {
                 </MenuItem>
               ))}
             </Select>
-          </FormControl></Box>
+          </FormControl>
+        </Box>
       </Box>
       <Box
         m={1}
@@ -189,16 +198,18 @@ export default function TempWidget({ id = "tempChart" }) {
             </Tooltip>
           </Box>
         </Box>
-        <DatePicker
-          label="Starting date"
-          minDate={minDate}
-          maxDate={maxDate}
-          value={startingDate}
-          onChange={(newValue) => {
-            handleNewStartDate(newValue);
-          }}
-          renderInput={(params) => <TextField {...params} />}
-        />
+        <Box mx={1}>
+          <DatePicker
+            label="Starting date"
+            minDate={minDate}
+            maxDate={maxDate}
+            value={startingDate}
+            onChange={(newValue) => {
+              handleNewStartDate(newValue);
+            }}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </Box>
         <DatePicker
           disableFuture
           label="End date"
@@ -212,6 +223,13 @@ export default function TempWidget({ id = "tempChart" }) {
         />
       </Box>
       <Box width="100%">
+        {errorMessage.length > 0 && (
+          <Box>
+            <Typography color={theme.palette.error.main}>
+              {errorMessage}
+            </Typography>
+          </Box>
+        )}
         {data.length > 0 ? (
           <ResponsiveContainer width="100%" height={200}>
             <BarChart
@@ -230,9 +248,15 @@ export default function TempWidget({ id = "tempChart" }) {
             </BarChart>
           </ResponsiveContainer>
         ) : (
-          <Typography textAlign="center" color={deepOrange[500]} my={1}>
-            No data for this time range
-          </Typography>
+          !loading && (
+            <Typography
+              color={theme.palette.info.main}
+              textAlign="center"
+              my={1}
+            >
+              No data for this time range
+            </Typography>
+          )
         )}
       </Box>
     </WidgetWindow>

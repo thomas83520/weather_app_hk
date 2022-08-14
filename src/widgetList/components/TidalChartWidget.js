@@ -22,8 +22,11 @@ import {
   Area,
   Tooltip,
 } from "recharts";
+import { useTheme } from "@emotion/react";
 
 export default function TidalChartWidget({ id = "tidalChart" }) {
+  const theme = useTheme();
+  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [station, setStation] = useState("CCH");
   const [date, setDate] = useState(moment());
@@ -40,26 +43,27 @@ export default function TidalChartWidget({ id = "tidalChart" }) {
   useEffect(() => {
     const getTides = async () => {
       setLoading(true);
-      const response = await fetch(
-        `https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=HHOT&lang=en&rformat=json&station=${station}&year=${date.get(
-          "years"
-        )}&month=${date.get("month") + 1}&day=${date.get("date")}`
-      );
+      try {
+        const response = await fetch(
+          `https://data.weather.gov.hk/weatherAPI/opendata/opendata.php?dataType=HHOT&lang=en&rformat=json&station=${station}&year=${date.get(
+            "years"
+          )}&month=${date.get("month") + 1}&day=${date.get("date")}`
+        );
 
-      const jsonResponse = await response.json();
+        const jsonResponse = await response.json();
 
-      console.log(startValue.get("hour"));
-      console.log(jsonResponse);
-      let newData = [];
-      for (
-        let i = startValue.get("hour") + 1;
-        i < endValue.get("hour") + 2;
-        i++
-      ) {
-        newData.push({ time: i - 1, value: jsonResponse.data[0][i] });
+        let newData = [];
+        for (
+          let i = startValue.get("hour") + 1;
+          i < endValue.get("hour") + 2;
+          i++
+        ) {
+          newData.push({ time: i - 1, value: jsonResponse.data[0][i] });
+        }
+        setData(newData);
+      } catch (e) {
+        setErrorMessage("Failed to load data.");
       }
-      console.log(newData);
-      setData(newData)
       setLoading(false);
     };
 
@@ -83,7 +87,7 @@ export default function TidalChartWidget({ id = "tidalChart" }) {
       >
         {loading && (
           <Box position="absolute" top="5px" left="10px">
-            <CircularProgress size="1rem"/>
+            <CircularProgress size="1rem" />
           </Box>
         )}
         <Box mx={1} textAlign="center">
@@ -99,7 +103,12 @@ export default function TidalChartWidget({ id = "tidalChart" }) {
       </Box>
       <Grid container my={2} spacing={2}>
         <Grid item xs={12} sm={12} lg={4}>
-          <Box display="flex" alignItems="center" justifyContent="center">
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            mx={1}
+          >
             <DatePicker
               label="Date"
               minDate={moment().set({ year: 2022, month: 0, date: 1 })}
@@ -118,7 +127,7 @@ export default function TidalChartWidget({ id = "tidalChart" }) {
               ampmInClock
               views={["hours"]}
               inputFormat="HH:00"
-              mask="__"
+              mask="__:__"
               label="From"
               value={startValue}
               onChange={(newValue) => {
@@ -146,6 +155,13 @@ export default function TidalChartWidget({ id = "tidalChart" }) {
         </Grid>
       </Grid>
       <Box width="100%">
+        {errorMessage.length > 0 && (
+          <Box>
+            <Typography color={theme.palette.error.main}>
+              {errorMessage}
+            </Typography>
+          </Box>
+        )}
         {data.length > 0 && (
           <ResponsiveContainer width="100%" height={200}>
             <AreaChart

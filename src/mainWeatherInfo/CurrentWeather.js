@@ -1,9 +1,11 @@
+import { useTheme } from "@emotion/react";
 import { Box, Typography, Button, Grid, Skeleton } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import WeatherIcon from "./components/WeatherIcon";
 import WeatherInfoDisplay from "./components/WeatherInfoDisplay";
 
 export default function CurrentWeather() {
+  const theme = useTheme();
   const [tempDefault, setTempDefault] = useState(null);
   const [humidityDefault, setHumidityDefault] = useState(null);
   const [tempMore, setTempMore] = useState(null);
@@ -73,11 +75,9 @@ export default function CurrentWeather() {
       </Button>
       <Box display={showMore ? "block" : "none"}>
         {tempMore ? (
-          <Grid
-            container
-          >
+          <Grid container>
             {tempMore.map((temp) => (
-              <Grid item xs={12} sm={6} lg={4}>
+              <Grid key={temp.place} item xs={12} sm={6} lg={4}>
                 <Box
                   mx="auto"
                   my={2}
@@ -85,7 +85,7 @@ export default function CurrentWeather() {
                   key={temp.place}
                   sx={{
                     borderRadius: "5px",
-                    boxShadow: "0px 0px 5px 4px rgba(236, 236, 236, 1)",
+                    boxShadow: "3px 3px 3px rgba(0,0,0,0.2),-0px -0px 3px rgba(200,200,200,0.7)",
                   }}
                   p={1}
                 >

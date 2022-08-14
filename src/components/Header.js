@@ -8,12 +8,14 @@ export default function Header() {
       <Box
         component="img"
         maxWidth="100%"
-        height={30}
+        height={40}
         alt="Honk Kong Flag"
         src="/assets/flag-HK.png"
-        pr={2}
+        py={2}
       />
-      <Typography component="h1">Hong Kong Weather</Typography>
+      <Typography pl={1} component="h1" color="primary" variant="h3">
+        Hong Kong Weather
+      </Typography>
     </Box>
   );
 }

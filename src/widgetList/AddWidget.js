@@ -27,12 +27,12 @@ export default function AddWidget({
           <Grid container spacing={2}>
             {widgetsAvailable.map((item, index) => {
               return (
-                <Grid key={index} item xs={12}>
+                <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
                   <Box
                     sx={{
                       filter: item.added ? "grayscale(100%)" : "grayscale(0%)",
                     }}
-                    onClick={item.added ? null : () => addWidget(index)}
+                    onClick={item.added ? null : () => addWidget([index])}
                   >
                     {item.demoWidget}
                   </Box>
