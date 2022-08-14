@@ -51,7 +51,7 @@ export const tidalStation = [
 export const initialWidgetsAvailable = [
   {
     demoWidget: (
-      <DemoWidget demoImage="/assets/barChart.png" name="Temperature range" />
+      <DemoWidget demoImage={require("./assets/barChart.png")} name="Temperature range" />
     ),
     added: false,
     id: "tempChart",
@@ -59,14 +59,14 @@ export const initialWidgetsAvailable = [
   },
   {
     demoWidget: (
-      <DemoWidget demoImage="/assets/pieGraph.png" name="Lighting count" />
+      <DemoWidget demoImage={require("./assets/pieGraph.png")} name="Lighting count" />
     ),
     added: false,
     id: "lightningCountGraph",
     widget: <LigthningCountWidget key="lightningCountGraph" />,
   },
   {
-    demoWidget: <DemoWidget demoImage="/assets/areaChart.png" name="Tidal" />,
+    demoWidget: <DemoWidget demoImage={require("./assets/areaChart.png")} name="Tidal" />,
     added: false,
     id: "tidalChart",
     widget: <TidalChartWidget key="tidalChart" />,
@@ -74,7 +74,7 @@ export const initialWidgetsAvailable = [
   {
     demoWidget: (
       <DemoWidget
-        demoImage="/assets/radarGraph.png"
+        demoImage={require("./assets/radarGraph.png")}
         name="Visibility last 10minutes"
       />
     ),

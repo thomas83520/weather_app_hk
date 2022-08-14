@@ -10,7 +10,7 @@ export default function Header() {
         maxWidth="100%"
         height={40}
         alt="Honk Kong Flag"
-        src="/assets/flag-HK.png"
+        src={require("../assets/flag-HK.png")}
         py={2}
       />
       <Typography pl={1} component="h1" color="primary" variant="h3">

@@ -8,9 +8,6 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import WidgetsList from "./widgetList/WidgetsList";
 import { WidgetListContextProvider } from "./context/widgetListContext";
 
-
-
-
 function App() {
   return (
     <Container>
@@ -18,7 +15,7 @@ function App() {
       <WidgetListContextProvider>
         <Grid container>
           <Grid item xs={12} md={6}>
-            <Box mx={{md:1}}>
+            <Box mx={{ md: 1 }}>
               <CurrentWeather />
               <WidgetWindow
                 icon={<CalendarMonthIcon fontSize="small" />}
@@ -29,7 +26,15 @@ function App() {
             </Box>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Box maxHeight="100vh" overflow={{ md: "scroll" }}>
+            <Box
+              maxHeight="100vh"
+              overflow={{ md: "scroll" }}
+              sx={{
+                "-ms-overflow-style": "none",
+                scrollbarWidth: "none",
+                "&::-webkit-scrollbar": { display: "none" },
+              }}
+            >
               <WidgetsList />
             </Box>
           </Grid>
