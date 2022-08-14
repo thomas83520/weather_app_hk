@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { Container, Grid, Box } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
@@ -10,6 +12,9 @@ import WidgetWindow from "./components/WidgetWindow";
 import { WidgetListContextProvider } from "./context/widgetListContext";
 
 function App() {
+  useEffect(() => {
+    document.title = "Weather in Hong Kong";
+  });
   return (
     <Container>
       <Header />

@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/weather_app_hk/static/js/main.760dcb82.js",
+    "main.js": "/weather_app_hk/static/js/main.cad0ee25.js",
     "static/media/radarGraph.png": "/weather_app_hk/static/media/radarGraph.efd97a1bbdfa4a9db50f.png",
     "static/media/pic93.png": "/weather_app_hk/static/media/pic93.a6dd71d1d10d59f04381.png",
     "static/media/pieGraph.png": "/weather_app_hk/static/media/pieGraph.8ac91982c6fc00aa94d3.png",
@@ -12,9 +12,9 @@
     "static/media/pic52.png": "/weather_app_hk/static/media/pic52.e93cc4f97c97f30c9ba9.png",
     "static/media/pic53.png": "/weather_app_hk/static/media/pic53.d37a323ca3be448c07c5.png",
     "index.html": "/weather_app_hk/index.html",
-    "main.760dcb82.js.map": "/weather_app_hk/static/js/main.760dcb82.js.map"
+    "main.cad0ee25.js.map": "/weather_app_hk/static/js/main.cad0ee25.js.map"
   },
   "entrypoints": [
-    "static/js/main.760dcb82.js"
+    "static/js/main.cad0ee25.js"
   ]
 }
