@@ -8,10 +8,10 @@ Programming assignment for Frontend Developer job interview.
 
 Assumptions made for this project.
 
-The project should display data coming only from the Hong Kong observatory open data APIs.
-The project should be fully responsive.
-The project shouldn't make any backend or API call exept from the Hong Kong observatory APIs.
-The project should use the same color as the company website.
+- The project should display data coming only from the Hong Kong observatory open data APIs.
+- The project should be fully responsive.
+- The project shouldn't make any backend or API call exept from the Hong Kong observatory APIs.
+- The project should use the same color as the company website.
 
 ## View the project
 
